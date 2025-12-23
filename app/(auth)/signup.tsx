@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Colors, Layout, Typography } from '../../src/constants/Theme';
-import { PremiumButton } from '../../src/components/PremiumButton';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../src/components/GlassCard';
+import { PremiumButton } from '../../src/components/PremiumButton';
+import { Colors, Layout, Typography } from '../../src/constants/Theme';
 import { useAuth } from '../../src/context/AuthContext';
 
 export default function SignupScreen() {
@@ -20,7 +20,7 @@ export default function SignupScreen() {
         setLoading(true);
         try {
             await login(email, role);
-            router.replace(`/( ${role} )`);
+            router.replace(`/(${role})`);
         } catch (e) {
             console.error(e);
         } finally {

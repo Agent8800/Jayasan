@@ -1,8 +1,9 @@
+import { useRouter } from 'expo-router';
+import { Bell, PieChart, Plus, Users } from 'lucide-react-native';
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Colors, Layout, Typography } from '../../../src/constants/Theme';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../../src/components/GlassCard';
-import { Bell, Search, Filter } from 'lucide-react-native';
+import { Colors, Layout, Typography } from '../../../src/constants/Theme';
 
 const StatCard = ({ title, value, color }: { title: string, value: string, color: string }) => (
     <View style={[styles.statCard, { borderLeftColor: color }]}>
@@ -12,14 +13,18 @@ const StatCard = ({ title, value, color }: { title: string, value: string, color
 );
 
 export default function AdminHome() {
+    const router = useRouter();
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View>
-                    <Text style={Typography.h2}>Dashboard</Text>
-                    <Text style={[Typography.body, { color: Colors.gray }]}>Welcome back, Admin</Text>
+                    <Text style={Typography.h2}>Admin Dashboard</Text>
+                    <Text style={[Typography.body, { color: Colors.gray }]}>System Overview</Text>
                 </View>
-                <TouchableOpacity style={styles.iconButton}>
+                <TouchableOpacity
+                    style={styles.iconButton}
+                    onPress={() => router.push('/(admin)/(tabs)/notifications')}
+                >
                     <Bell color={Colors.black} size={24} />
                     <View style={styles.badge} />
                 </TouchableOpacity>
@@ -31,6 +36,28 @@ export default function AdminHome() {
                     <StatCard title="Active Techs" value="12" color={Colors.success} />
                     <StatCard title="Pending" value="45" color={Colors.warning} />
                     <StatCard title="Resolved" value="71" color={Colors.secondary} />
+                </View>
+
+                <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Quick Actions</Text>
+                <View style={styles.quickActions}>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(admin)/(tabs)/add')}>
+                        <View style={[styles.actionIcon, { backgroundColor: Colors.accentBlue }]}>
+                            <Plus size={24} color={Colors.primary} />
+                        </View>
+                        <Text style={styles.actionLabel}>New Entry</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(admin)/(tabs)/users')}>
+                        <View style={[styles.actionIcon, { backgroundColor: '#F2F2F7' }]}>
+                            <Users size={24} color={Colors.black} />
+                        </View>
+                        <Text style={styles.actionLabel}>Manage Users</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(admin)/(tabs)/analytics')}>
+                        <View style={[styles.actionIcon, { backgroundColor: '#F2F2F7' }]}>
+                            <PieChart size={24} color={Colors.black} />
+                        </View>
+                        <Text style={styles.actionLabel}>Stats</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Recent Complaints</Text>
@@ -156,5 +183,32 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: Colors.black,
         fontWeight: '500',
+    },
+    quickActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+    },
+    actionBox: {
+        width: '31%',
+        backgroundColor: Colors.white,
+        padding: 12,
+        borderRadius: 16,
+        alignItems: 'center',
+        ...Layout.cardShadow,
+    },
+    actionIcon: {
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    actionLabel: {
+        fontSize: 11,
+        fontWeight: '600',
+        color: Colors.black,
+        textAlign: 'center',
     }
 });

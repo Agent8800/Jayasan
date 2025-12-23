@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { ArrowRight, Bell, Clock, Plus } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -18,6 +19,7 @@ const TimelineStep = ({ title, date, active, completed }: any) => (
 );
 
 export default function UserHome() {
+    const router = useRouter();
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -25,8 +27,12 @@ export default function UserHome() {
                     <Text style={Typography.h2}>Welcome, John</Text>
                     <Text style={[Typography.body, { color: Colors.gray }]}>Track your requests</Text>
                 </View>
-                <TouchableOpacity style={styles.iconButton}>
+                <TouchableOpacity
+                    style={styles.iconButton}
+                    onPress={() => router.push('/(user)/(tabs)/notifications')}
+                >
                     <Bell color={Colors.black} size={24} />
+                    <View style={styles.badge} />
                 </TouchableOpacity>
             </View>
 
@@ -45,13 +51,13 @@ export default function UserHome() {
                 </GlassCard>
 
                 <View style={styles.quickActions}>
-                    <TouchableOpacity style={styles.actionBox}>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(user)/(tabs)/add')}>
                         <View style={[styles.actionIcon, { backgroundColor: Colors.accentBlue }]}>
                             <Plus size={24} color={Colors.primary} />
                         </View>
                         <Text style={styles.actionLabel}>New Complaint</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionBox}>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(user)/(tabs)/complaints')}>
                         <View style={[styles.actionIcon, { backgroundColor: '#F2F2F7' }]}>
                             <Clock size={24} color={Colors.black} />
                         </View>
@@ -98,6 +104,17 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.lightGray,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    badge: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        width: 10,
+        height: 10,
+        backgroundColor: Colors.primary,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: Colors.lightGray,
     },
     scrollContent: {
         paddingHorizontal: Layout.padding,

@@ -1,56 +1,53 @@
+import { Bell } from 'lucide-react-native';
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Colors, Layout, Typography } from '../../../src/constants/Theme';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../../src/components/GlassCard';
-import { Bell, Search, Filter } from 'lucide-react-native';
+import { Colors, Layout, Typography } from '../../../src/constants/Theme';
 
-const StatCard = ({ title, value, color }: { title: string, value: string, color: string }) => (
-    <View style={[styles.statCard, { borderLeftColor: color }]}>
-        <Text style={styles.statLabel}>{title}</Text>
-        <Text style={[styles.statValue, { color }]}>{value}</Text>
-    </View>
-);
-
-export default function AdminHome() {
+export default function UserComplaints() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View>
-                    <Text style={Typography.h2}>Dashboard</Text>
-                    <Text style={[Typography.body, { color: Colors.gray }]}>Welcome back, Admin</Text>
+                    <Text style={Typography.h2}>My Complaints</Text>
+                    <Text style={[Typography.body, { color: Colors.gray }]}>Track your requests</Text>
                 </View>
                 <TouchableOpacity style={styles.iconButton}>
                     <Bell color={Colors.black} size={24} />
-                    <View style={styles.badge} />
                 </TouchableOpacity>
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <View style={styles.statsGrid}>
-                    <StatCard title="Total Complaints" value="128" color={Colors.primary} />
-                    <StatCard title="Active Techs" value="12" color={Colors.success} />
-                    <StatCard title="Pending" value="45" color={Colors.warning} />
-                    <StatCard title="Resolved" value="71" color={Colors.secondary} />
-                </View>
-
-                <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Recent Complaints</Text>
-
-                {[1, 2, 3, 4, 5].map((i) => (
-                    <GlassCard key={i} style={styles.complaintCard}>
-                        <View style={styles.complaintHeader}>
-                            <Text style={styles.complaintId}>#JPL-00{i}</Text>
-                            <View style={[styles.statusBadge, { backgroundColor: Colors.accentBlue }]}>
-                                <Text style={styles.statusText}>PENDING</Text>
+                {[1, 2, 3].map((i) => (
+                    <GlassCard key={i} style={styles.recordCard}>
+                        <View style={styles.recordHeader}>
+                            <View style={[styles.statusTag, { backgroundColor: i === 1 ? Colors.accentBlue : '#E8F5E9' }]}>
+                                <Text style={[styles.statusTagText, { color: i === 1 ? Colors.primary : Colors.success }]}>
+                                    {i === 1 ? 'IN PROGRESS' : 'RESOLVED'}
+                                </Text>
                             </View>
+                            <Text style={styles.dateText}>2{i} Dec, 2025</Text>
                         </View>
-                        <Text style={styles.complaintTitle}>AC Service Required at Block B</Text>
-                        <View style={styles.complaintFooter}>
-                            <Text style={styles.complaintDate}>23 Dec 2025</Text>
-                            <Text style={styles.complaintUser}>John Doe</Text>
+                        <Text style={styles.recordTitle}>
+                            {i === 1 ? 'Water Leakage in Kitchen' : 'Light Flicker in Bedroom'}
+                        </Text>
+                        <Text style={styles.recordId}>ID: #JPL-882{i}</Text>
+
+                        <View style={styles.divider} />
+
+                        <View style={styles.footer}>
+                            <View style={styles.techInfo}>
+                                <View style={styles.techAvatar} />
+                                <Text style={styles.techName}>Tech: {i === 1 ? 'David Wilson' : 'Sarah Connor'}</Text>
+                            </View>
+                            <TouchableOpacity>
+                                <Text style={styles.detailsLink}>Details</Text>
+                            </TouchableOpacity>
                         </View>
                     </GlassCard>
                 ))}
 
+                {/* Empty State visual if needed */}
                 <View style={{ height: 100 }} />
             </ScrollView>
         </View>
@@ -78,83 +75,70 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    badge: {
-        position: 'absolute',
-        top: 12,
-        right: 12,
-        width: 10,
-        height: 10,
-        backgroundColor: Colors.error,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: Colors.lightGray,
-    },
     scrollContent: {
         paddingHorizontal: Layout.padding,
     },
-    statsGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-    },
-    statCard: {
-        width: '48%',
-        backgroundColor: Colors.white,
-        padding: 16,
-        borderRadius: 12,
+    recordCard: {
         marginBottom: 16,
-        borderLeftWidth: 4,
-        ...Layout.cardShadow,
     },
-    statLabel: {
-        fontSize: 12,
-        color: Colors.gray,
-        fontWeight: '600',
-        marginBottom: 4,
-    },
-    statValue: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    complaintCard: {
-        marginBottom: 12,
-    },
-    complaintHeader: {
+    recordHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: 10,
     },
-    complaintId: {
-        fontWeight: '700',
-        color: Colors.primary,
-    },
-    statusBadge: {
-        paddingHorizontal: 8,
+    statusTag: {
+        paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 6,
     },
-    statusText: {
+    statusTagText: {
         fontSize: 10,
         fontWeight: 'bold',
-        color: Colors.primary,
     },
-    complaintTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        marginBottom: 12,
-    },
-    complaintFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    complaintDate: {
+    dateText: {
         fontSize: 12,
         color: Colors.gray,
     },
-    complaintUser: {
-        fontSize: 12,
+    recordTitle: {
+        fontSize: 18,
+        fontWeight: '700',
         color: Colors.black,
-        fontWeight: '500',
+        marginBottom: 4,
+    },
+    recordId: {
+        fontSize: 12,
+        color: Colors.gray,
+        marginBottom: 16,
+    },
+    divider: {
+        height: 1,
+        backgroundColor: '#F0F0F0',
+        marginBottom: 12,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    techInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    techAvatar: {
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+        backgroundColor: Colors.lightGray,
+        marginRight: 8,
+    },
+    techName: {
+        fontSize: 13,
+        color: Colors.darkGray,
+    },
+    detailsLink: {
+        color: Colors.primary,
+        fontWeight: '600',
+        fontSize: 14,
     }
 });

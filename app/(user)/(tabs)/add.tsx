@@ -1,59 +1,86 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Colors, Layout, Typography } from '../../../src/constants/Theme';
+import { Camera, Image as ImageIcon } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../../src/components/GlassCard';
-import { Bell, Search, Filter } from 'lucide-react-native';
+import { PremiumButton } from '../../../src/components/PremiumButton';
+import { Colors, Layout, Typography } from '../../../src/constants/Theme';
 
-const StatCard = ({ title, value, color }: { title: string, value: string, color: string }) => (
-    <View style={[styles.statCard, { borderLeftColor: color }]}>
-        <Text style={styles.statLabel}>{title}</Text>
-        <Text style={[styles.statValue, { color }]}>{value}</Text>
-    </View>
-);
+export default function SubmitComplaint() {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
 
-export default function AdminHome() {
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+        >
             <View style={styles.header}>
-                <View>
-                    <Text style={Typography.h2}>Dashboard</Text>
-                    <Text style={[Typography.body, { color: Colors.gray }]}>Welcome back, Admin</Text>
-                </View>
-                <TouchableOpacity style={styles.iconButton}>
-                    <Bell color={Colors.black} size={24} />
-                    <View style={styles.badge} />
-                </TouchableOpacity>
+                <Text style={Typography.h2}>New Complaint</Text>
+                <Text style={[Typography.body, { color: Colors.gray }]}>Tell us what needs fixing</Text>
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <View style={styles.statsGrid}>
-                    <StatCard title="Total Complaints" value="128" color={Colors.primary} />
-                    <StatCard title="Active Techs" value="12" color={Colors.success} />
-                    <StatCard title="Pending" value="45" color={Colors.warning} />
-                    <StatCard title="Resolved" value="71" color={Colors.secondary} />
-                </View>
+                <GlassCard style={styles.formCard}>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Issue Title</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="e.g. AC not cooling"
+                            value={title}
+                            onChangeText={setTitle}
+                        />
+                    </View>
 
-                <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Recent Complaints</Text>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Description</Text>
+                        <TextInput
+                            style={[styles.input, styles.textArea]}
+                            placeholder="Please provide more details..."
+                            multiline
+                            numberOfLines={4}
+                            value={description}
+                            onChangeText={setDescription}
+                            textAlignVertical="top"
+                        />
+                    </View>
 
-                {[1, 2, 3, 4, 5].map((i) => (
-                    <GlassCard key={i} style={styles.complaintCard}>
-                        <View style={styles.complaintHeader}>
-                            <Text style={styles.complaintId}>#JPL-00{i}</Text>
-                            <View style={[styles.statusBadge, { backgroundColor: Colors.accentBlue }]}>
-                                <Text style={styles.statusText}>PENDING</Text>
-                            </View>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Category</Text>
+                        <View style={styles.categoryGrid}>
+                            {['Electrical', 'Plumbing', 'AC', 'Other'].map((cat) => (
+                                <TouchableOpacity
+                                    key={cat}
+                                    style={[styles.catBtn, category === cat && styles.catBtnActive]}
+                                    onPress={() => setCategory(cat)}
+                                >
+                                    <Text style={[styles.catText, category === cat && styles.catTextActive]}>{cat}</Text>
+                                </TouchableOpacity>
+                            ))}
                         </View>
-                        <Text style={styles.complaintTitle}>AC Service Required at Block B</Text>
-                        <View style={styles.complaintFooter}>
-                            <Text style={styles.complaintDate}>23 Dec 2025</Text>
-                            <Text style={styles.complaintUser}>John Doe</Text>
-                        </View>
-                    </GlassCard>
-                ))}
+                    </View>
 
+                    <Text style={styles.label}>Attachments</Text>
+                    <View style={styles.uploadContainer}>
+                        <TouchableOpacity style={styles.uploadSlot}>
+                            <Camera size={24} color={Colors.primary} />
+                            <Text style={styles.uploadLabel}>Camera</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.uploadSlot}>
+                            <ImageIcon size={24} color={Colors.primary} />
+                            <Text style={styles.uploadLabel}>Gallery</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <PremiumButton
+                        title="Submit Request"
+                        onPress={() => { }}
+                        style={{ marginTop: 24 }}
+                    />
+                </GlassCard>
                 <View style={{ height: 100 }} />
             </ScrollView>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -64,97 +91,83 @@ const styles = StyleSheet.create({
         paddingTop: 60,
     },
     header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         paddingHorizontal: Layout.padding,
-        marginBottom: 24,
-    },
-    iconButton: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: Colors.lightGray,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    badge: {
-        position: 'absolute',
-        top: 12,
-        right: 12,
-        width: 10,
-        height: 10,
-        backgroundColor: Colors.error,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: Colors.lightGray,
+        marginBottom: 20,
     },
     scrollContent: {
         paddingHorizontal: Layout.padding,
     },
-    statsGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+    formCard: {
+        padding: 4,
     },
-    statCard: {
-        width: '48%',
-        backgroundColor: Colors.white,
-        padding: 16,
-        borderRadius: 12,
-        marginBottom: 16,
-        borderLeftWidth: 4,
-        ...Layout.cardShadow,
+    inputGroup: {
+        marginBottom: 20,
     },
-    statLabel: {
-        fontSize: 12,
-        color: Colors.gray,
-        fontWeight: '600',
-        marginBottom: 4,
-    },
-    statValue: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    complaintCard: {
-        marginBottom: 12,
-    },
-    complaintHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    label: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: Colors.black,
         marginBottom: 8,
     },
-    complaintId: {
-        fontWeight: '700',
-        color: Colors.primary,
+    input: {
+        height: 54,
+        backgroundColor: Colors.white,
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        fontSize: 15,
+        borderWidth: 1,
+        borderColor: Colors.lightGray,
     },
-    statusBadge: {
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 6,
+    textArea: {
+        height: 120,
+        paddingTop: 16,
     },
-    statusText: {
-        fontSize: 10,
-        fontWeight: 'bold',
-        color: Colors.primary,
-    },
-    complaintTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        marginBottom: 12,
-    },
-    complaintFooter: {
+    categoryGrid: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        marginHorizontal: -4,
     },
-    complaintDate: {
+    catBtn: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: Colors.lightGray,
+        margin: 4,
+        backgroundColor: Colors.white,
+    },
+    catBtnActive: {
+        backgroundColor: Colors.primary,
+        borderColor: Colors.primary,
+    },
+    catText: {
         fontSize: 12,
+        fontWeight: '600',
         color: Colors.gray,
     },
-    complaintUser: {
-        fontSize: 12,
-        color: Colors.black,
-        fontWeight: '500',
+    catTextActive: {
+        color: Colors.white,
+    },
+    uploadContainer: {
+        flexDirection: 'row',
+        marginTop: 8,
+    },
+    uploadSlot: {
+        width: 80,
+        height: 80,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderStyle: 'dashed',
+        borderColor: Colors.primary,
+        marginRight: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.accentBlue,
+    },
+    uploadLabel: {
+        fontSize: 10,
+        color: Colors.primary,
+        fontWeight: '700',
+        marginTop: 4,
     }
 });

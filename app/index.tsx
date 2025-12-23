@@ -27,7 +27,7 @@ export default function SplashScreen() {
         if (!loading) {
             const timer = setTimeout(() => {
                 if (user) {
-                    router.replace(`/( ${user.role} )`);
+                    router.replace(`/(${user.role})`);
                 } else {
                     router.replace('/(auth)/welcome');
                 }

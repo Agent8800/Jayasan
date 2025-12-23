@@ -1,6 +1,6 @@
 import { BlurView } from 'expo-blur';
 import { useRouter, useSegments } from 'expo-router';
-import { Bell, ClipboardList, Home, PieChart, PlusCircle, Settings, Users } from 'lucide-react-native';
+import { Bell, ClipboardList, Home, Package, PieChart, PlusCircle, Settings, Users } from 'lucide-react-native';
 import React from 'react';
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Theme';
@@ -31,31 +31,33 @@ export const FloatingNavBar = () => {
 
     const getNavItems = () => {
         const base = [
-            { id: 'index', icon: Home, path: `/( ${role} )/(tabs)` },
+            { id: 'index', icon: Home, path: `/(${role})/(tabs)` },
         ];
 
         if (role === 'admin') {
             return [
                 ...base,
-                { id: 'users', icon: Users, path: `/( ${role} )/(tabs)/users` },
-                { id: 'add', icon: PlusCircle, path: `/( ${role} )/(tabs)/add` },
-                { id: 'analytics', icon: PieChart, path: `/( ${role} )/(tabs)/analytics` },
-                { id: 'settings', icon: Settings, path: `/( ${role} )/(tabs)/settings` },
+                { id: 'users', icon: Users, path: `/(${role})/(tabs)/users` },
+                { id: 'products', icon: Package, path: `/(${role})/(tabs)/products` },
+                { id: 'complaints', icon: ClipboardList, path: `/(${role})/(tabs)/complaints` },
+                { id: 'add', icon: PlusCircle, path: `/(${role})/(tabs)/add` },
+                { id: 'analytics', icon: PieChart, path: `/(${role})/(tabs)/analytics` },
+                { id: 'settings', icon: Settings, path: `/(${role})/(tabs)/settings` },
             ];
         } else if (role === 'technician') {
             return [
                 ...base,
-                { id: 'complaints', icon: ClipboardList, path: `/( ${role} )/(tabs)/complaints` },
-                { id: 'add', icon: PlusCircle, path: `/( ${role} )/(tabs)/add` },
-                { id: 'notifications', icon: Bell, path: `/( ${role} )/(tabs)/notifications` },
-                { id: 'settings', icon: Settings, path: `/( ${role} )/(tabs)/settings` },
+                { id: 'complaints', icon: ClipboardList, path: `/(${role})/(tabs)/complaints` },
+                { id: 'add', icon: PlusCircle, path: `/(${role})/(tabs)/add` },
+                { id: 'notifications', icon: Bell, path: `/(${role})/(tabs)/notifications` },
+                { id: 'settings', icon: Settings, path: `/(${role})/(tabs)/settings` },
             ];
         } else {
             return [
                 ...base,
-                { id: 'complaints', icon: ClipboardList, path: `/( ${role} )/(tabs)/complaints` },
-                { id: 'notifications', icon: Bell, path: `/( ${role} )/(tabs)/notifications` },
-                { id: 'settings', icon: Settings, path: `/( ${role} )/(tabs)/settings` },
+                { id: 'complaints', icon: ClipboardList, path: `/(${role})/(tabs)/complaints` },
+                { id: 'notifications', icon: Bell, path: `/(${role})/(tabs)/notifications` },
+                { id: 'settings', icon: Settings, path: `/(${role})/(tabs)/settings` },
             ];
         }
     };

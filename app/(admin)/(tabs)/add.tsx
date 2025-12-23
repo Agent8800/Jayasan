@@ -1,40 +1,41 @@
-import { Briefcase, Image as ImageIcon, UserCircle } from 'lucide-react-native';
+import { Briefcase, Image as ImageIcon, Package, UserCircle } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../../src/components/GlassCard';
 import { PremiumButton } from '../../../src/components/PremiumButton';
 import { Colors, Layout, Typography } from '../../../src/constants/Theme';
 
-export default function AddScreen() {
-    const [activeTab, setActiveTab] = useState<'complaint' | 'user'>('complaint');
+export default function AdminAddScreen() {
+    const [activeTab, setActiveTab] = useState<'complaint' | 'user' | 'product'>('complaint');
+    const [selectedRole, setSelectedRole] = useState('User');
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={Typography.h2}>Create New</Text>
-                <Text style={[Typography.body, { color: Colors.gray }]}>Add complaints or users</Text>
+                <Text style={[Typography.body, { color: Colors.gray }]}>Manage system entities</Text>
             </View>
 
             <View style={styles.tabContainer}>
-                <TouchableOpacity
-                    style={[styles.tab, activeTab === 'complaint' && styles.activeTab]}
-                    onPress={() => setActiveTab('complaint')}
-                >
-                    <Briefcase size={18} color={activeTab === 'complaint' ? Colors.white : Colors.gray} />
-                    <Text style={[styles.tabText, activeTab === 'complaint' && styles.activeTabText]}>Complaint</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.tab, activeTab === 'user' && styles.activeTab]}
-                    onPress={() => setActiveTab('user')}
-                >
-                    <UserCircle size={18} color={activeTab === 'user' ? Colors.white : Colors.gray} />
-                    <Text style={[styles.tabText, activeTab === 'user' && styles.activeTabText]}>User</Text>
-                </TouchableOpacity>
+                {[
+                    { id: 'complaint', label: 'Complaint', icon: Briefcase },
+                    { id: 'user', label: 'User', icon: UserCircle },
+                    { id: 'product', label: 'Product', icon: Package },
+                ].map((tab) => (
+                    <TouchableOpacity
+                        key={tab.id}
+                        style={[styles.tab, activeTab === tab.id && styles.activeTab]}
+                        onPress={() => setActiveTab(tab.id as any)}
+                    >
+                        <tab.icon size={16} color={activeTab === tab.id ? Colors.white : Colors.gray} />
+                        <Text style={[styles.tabText, activeTab === tab.id && styles.activeTabText]}>{tab.label}</Text>
+                    </TouchableOpacity>
+                ))}
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <GlassCard style={styles.formCard}>
-                    {activeTab === 'complaint' ? (
+                    {activeTab === 'complaint' && (
                         <>
                             <Text style={styles.label}>Customer Name</Text>
                             <TextInput style={styles.input} placeholder="Select customer" />
@@ -49,35 +50,57 @@ export default function AddScreen() {
 
                             <Text style={styles.label}>Category</Text>
                             <TextInput style={styles.input} placeholder="e.g. Electrical, Plumbing" />
-
-                            <TouchableOpacity style={styles.uploadBtn}>
-                                <ImageIcon size={24} color={Colors.primary} />
-                                <Text style={styles.uploadText}>Upload Reference Images</Text>
-                            </TouchableOpacity>
                         </>
-                    ) : (
+                    )}
+
+                    {activeTab === 'user' && (
                         <>
                             <Text style={styles.label}>Full Name</Text>
                             <TextInput style={styles.input} placeholder="Enter name" />
 
-                            <Text style={styles.label}>Email</Text>
+                            <Text style={styles.label}>Email Address</Text>
                             <TextInput style={styles.input} placeholder="name@example.com" keyboardType="email-address" />
 
-                            <Text style={styles.label}>Role</Text>
+                            <Text style={styles.label}>Select Role</Text>
                             <View style={styles.roleGrid}>
                                 {['User', 'Technician', 'Admin'].map(r => (
-                                    <TouchableOpacity key={r} style={styles.roleBtn}>
-                                        <Text style={styles.roleBtnText}>{r}</Text>
+                                    <TouchableOpacity
+                                        key={r}
+                                        style={[styles.roleBtn, selectedRole === r && styles.roleBtnActive]}
+                                        onPress={() => setSelectedRole(r)}
+                                    >
+                                        <Text style={[styles.roleBtnText, selectedRole === r && styles.roleBtnTextActive]}>{r}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </View>
                         </>
                     )}
 
+                    {activeTab === 'product' && (
+                        <>
+                            <Text style={styles.label}>Product Name</Text>
+                            <TextInput style={styles.input} placeholder="e.g. Voltas 1.5 Ton AC" />
+
+                            <Text style={styles.label}>Model Code</Text>
+                            <TextInput style={styles.input} placeholder="J-2025-XXXX" />
+
+                            <Text style={styles.label}>Assign to Client</Text>
+                            <TextInput style={styles.input} placeholder="Search client name" />
+
+                            <Text style={styles.label}>Warranty Period (Months)</Text>
+                            <TextInput style={styles.input} placeholder="12" keyboardType="numeric" />
+                        </>
+                    )}
+
+                    <TouchableOpacity style={styles.uploadBtn}>
+                        <ImageIcon size={24} color={Colors.primary} />
+                        <Text style={styles.uploadText}>Upload Reference Media</Text>
+                    </TouchableOpacity>
+
                     <PremiumButton
-                        title={activeTab === 'complaint' ? "Create Complaint" : "Register User"}
+                        title={`Create ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`}
                         onPress={() => { }}
-                        style={{ marginTop: 20 }}
+                        style={{ marginTop: 24 }}
                     />
                 </GlassCard>
 
@@ -117,9 +140,9 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
     },
     tabText: {
-        marginLeft: 8,
-        fontSize: 14,
-        fontWeight: '600',
+        marginLeft: 6,
+        fontSize: 12,
+        fontWeight: '700',
         color: Colors.gray,
     },
     activeTabText: {
@@ -129,19 +152,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: Layout.padding,
     },
     formCard: {
-        padding: 4, // Inner content is padded by GlassCard (20)
+        padding: 4,
     },
     label: {
         fontSize: 14,
-        fontWeight: '600',
+        fontWeight: '700',
         color: Colors.black,
         marginBottom: 8,
         marginTop: 16,
     },
     input: {
         backgroundColor: Colors.white,
-        height: 50,
-        borderRadius: 10,
+        height: 52,
+        borderRadius: 12,
         paddingHorizontal: 16,
         fontSize: 15,
         borderWidth: 1,
@@ -149,15 +172,15 @@ const styles = StyleSheet.create({
     },
     textArea: {
         height: 100,
-        paddingTop: 12,
+        paddingTop: 16,
         textAlignVertical: 'top',
     },
     uploadBtn: {
-        height: 100,
+        height: 90,
         borderWidth: 1,
         borderColor: Colors.primary,
         borderStyle: 'dashed',
-        borderRadius: 10,
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
@@ -166,7 +189,8 @@ const styles = StyleSheet.create({
     uploadText: {
         marginTop: 8,
         color: Colors.primary,
-        fontWeight: '600',
+        fontWeight: '700',
+        fontSize: 12,
     },
     roleGrid: {
         flexDirection: 'row',
@@ -178,14 +202,21 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderWidth: 1,
         borderColor: Colors.lightGray,
-        borderRadius: 8,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 4,
     },
+    roleBtnActive: {
+        backgroundColor: Colors.primary,
+        borderColor: Colors.primary,
+    },
     roleBtnText: {
-        fontSize: 13,
-        fontWeight: '600',
+        fontSize: 12,
+        fontWeight: '700',
         color: Colors.gray,
+    },
+    roleBtnTextActive: {
+        color: Colors.white,
     }
 });

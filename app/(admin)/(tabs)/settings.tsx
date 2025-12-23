@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { Bell, ChevronRight, HelpCircle, Shield, User } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -20,6 +21,7 @@ const SettingItem = ({ icon: Icon, label, onPress }: any) => (
 
 export default function SettingsScreen() {
     const { logout, user } = useAuth();
+    const router = useRouter();
 
     return (
         <View style={styles.container}>
@@ -60,7 +62,10 @@ export default function SettingsScreen() {
 
                 <PremiumButton
                     title="Sign Out"
-                    onPress={logout}
+                    onPress={async () => {
+                        await logout();
+                        router.replace('/(auth)/login');
+                    }}
                     variant="secondary"
                     style={styles.logoutBtn}
                 />

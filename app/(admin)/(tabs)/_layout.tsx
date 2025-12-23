@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { FloatingNavBar } from '../../../src/components/FloatingNavBar';
 
 export default function TabLayout() {
@@ -14,6 +14,9 @@ export default function TabLayout() {
             >
                 <Tabs.Screen name="index" />
                 <Tabs.Screen name="users" />
+                <Tabs.Screen name="products" />
+                <Tabs.Screen name="complaints" />
+                <Tabs.Screen name="notifications" />
                 <Tabs.Screen name="add" />
                 <Tabs.Screen name="analytics" />
                 <Tabs.Screen name="settings" />

@@ -1,10 +1,12 @@
-import { Bell, CheckCircle2, MapPin } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { Bell, CheckCircle2, ClipboardList, MapPin, PlusSquare, Settings } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../../src/components/GlassCard';
 import { Colors, Layout, Typography } from '../../../src/constants/Theme';
 
 export default function TechnicianHome() {
+    const router = useRouter();
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -12,7 +14,10 @@ export default function TechnicianHome() {
                     <Text style={Typography.h2}>Work Summary</Text>
                     <Text style={[Typography.body, { color: Colors.gray }]}>Today's schedule</Text>
                 </View>
-                <TouchableOpacity style={styles.iconButton}>
+                <TouchableOpacity
+                    style={styles.iconButton}
+                    onPress={() => router.push('/(technician)/(tabs)/notifications')}
+                >
                     <Bell color={Colors.black} size={24} />
                     <View style={styles.badge} />
                 </TouchableOpacity>
@@ -32,6 +37,28 @@ export default function TechnicianHome() {
                         </View>
                     </View>
                 </GlassCard>
+
+                <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Quick Actions</Text>
+                <View style={styles.quickActions}>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(technician)/(tabs)/complaints')}>
+                        <View style={[styles.actionIcon, { backgroundColor: Colors.accentBlue }]}>
+                            <ClipboardList size={24} color={Colors.primary} />
+                        </View>
+                        <Text style={styles.actionLabel}>Assigned</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(technician)/(tabs)/add')}>
+                        <View style={[styles.actionIcon, { backgroundColor: '#F2F2F7' }]}>
+                            <PlusSquare size={24} color={Colors.black} />
+                        </View>
+                        <Text style={styles.actionLabel}>Report</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionBox} onPress={() => router.push('/(technician)/(tabs)/settings')}>
+                        <View style={[styles.actionIcon, { backgroundColor: '#F2F2F7' }]}>
+                            <Settings size={24} color={Colors.black} />
+                        </View>
+                        <Text style={styles.actionLabel}>Settings</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Active Tasks</Text>
 
@@ -195,5 +222,32 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: Colors.gray,
         fontWeight: '500',
+    },
+    quickActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+    },
+    actionBox: {
+        width: '31%',
+        backgroundColor: Colors.white,
+        padding: 12,
+        borderRadius: 16,
+        alignItems: 'center',
+        ...Layout.cardShadow,
+    },
+    actionIcon: {
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    actionLabel: {
+        fontSize: 11,
+        fontWeight: '600',
+        color: Colors.black,
+        textAlign: 'center',
     }
 });

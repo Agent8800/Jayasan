@@ -1,56 +1,54 @@
+import { Bell, Clock, MapPin } from 'lucide-react-native';
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Colors, Layout, Typography } from '../../../src/constants/Theme';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GlassCard } from '../../../src/components/GlassCard';
-import { Bell, Search, Filter } from 'lucide-react-native';
+import { Colors, Layout, Typography } from '../../../src/constants/Theme';
 
-const StatCard = ({ title, value, color }: { title: string, value: string, color: string }) => (
-    <View style={[styles.statCard, { borderLeftColor: color }]}>
-        <Text style={styles.statLabel}>{title}</Text>
-        <Text style={[styles.statValue, { color }]}>{value}</Text>
-    </View>
-);
-
-export default function AdminHome() {
+export default function TechnicianComplaints() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View>
-                    <Text style={Typography.h2}>Dashboard</Text>
-                    <Text style={[Typography.body, { color: Colors.gray }]}>Welcome back, Admin</Text>
+                    <Text style={Typography.h2}>Assigned Tasks</Text>
+                    <Text style={[Typography.body, { color: Colors.gray }]}>Your job list for today</Text>
                 </View>
                 <TouchableOpacity style={styles.iconButton}>
                     <Bell color={Colors.black} size={24} />
-                    <View style={styles.badge} />
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.tabBar}>
+                <TouchableOpacity style={[styles.miniTab, styles.activeMiniTab]}>
+                    <Text style={styles.activeMiniTabText}>Active</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.miniTab}>
+                    <Text style={styles.miniTabText}>Completed</Text>
                 </TouchableOpacity>
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <View style={styles.statsGrid}>
-                    <StatCard title="Total Complaints" value="128" color={Colors.primary} />
-                    <StatCard title="Active Techs" value="12" color={Colors.success} />
-                    <StatCard title="Pending" value="45" color={Colors.warning} />
-                    <StatCard title="Resolved" value="71" color={Colors.secondary} />
-                </View>
-
-                <Text style={[Typography.h3, { marginTop: 24, marginBottom: 16 }]}>Recent Complaints</Text>
-
-                {[1, 2, 3, 4, 5].map((i) => (
-                    <GlassCard key={i} style={styles.complaintCard}>
-                        <View style={styles.complaintHeader}>
-                            <Text style={styles.complaintId}>#JPL-00{i}</Text>
-                            <View style={[styles.statusBadge, { backgroundColor: Colors.accentBlue }]}>
-                                <Text style={styles.statusText}>PENDING</Text>
+                {[1, 2, 3].map((i) => (
+                    <GlassCard key={i} style={styles.taskCard}>
+                        <View style={styles.taskHeader}>
+                            <Text style={styles.taskTime}>Due: {10 + i}:30 AM</Text>
+                            <View style={[styles.priorityBadge, { backgroundColor: Colors.accentBlue }]}>
+                                <Text style={styles.priorityText}>HIGH</Text>
                             </View>
                         </View>
-                        <Text style={styles.complaintTitle}>AC Service Required at Block B</Text>
-                        <View style={styles.complaintFooter}>
-                            <Text style={styles.complaintDate}>23 Dec 2025</Text>
-                            <Text style={styles.complaintUser}>John Doe</Text>
+                        <Text style={styles.taskTitle}>Server Room AC - Preventive Maintenance</Text>
+                        <View style={styles.infoRow}>
+                            <MapPin size={14} color={Colors.gray} />
+                            <Text style={styles.infoText}>Block C, Floor {i}</Text>
                         </View>
+                        <View style={[styles.infoRow, { marginTop: 4 }]}>
+                            <Clock size={14} color={Colors.gray} />
+                            <Text style={styles.infoText}>Estimated: 45 mins</Text>
+                        </View>
+                        <TouchableOpacity style={styles.startBtn}>
+                            <Text style={styles.startBtnText}>View Details</Text>
+                        </TouchableOpacity>
                     </GlassCard>
                 ))}
-
                 <View style={{ height: 100 }} />
             </ScrollView>
         </View>
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: Layout.padding,
-        marginBottom: 24,
+        marginBottom: 20,
     },
     iconButton: {
         width: 48,
@@ -78,83 +76,82 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    badge: {
-        position: 'absolute',
-        top: 12,
-        right: 12,
-        width: 10,
-        height: 10,
-        backgroundColor: Colors.error,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: Colors.lightGray,
+    tabBar: {
+        flexDirection: 'row',
+        paddingHorizontal: Layout.padding,
+        marginBottom: 16,
+    },
+    miniTab: {
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        borderRadius: 20,
+        marginRight: 10,
+        backgroundColor: Colors.lightGray,
+    },
+    activeMiniTab: {
+        backgroundColor: Colors.primary,
+    },
+    miniTabText: {
+        fontSize: 13,
+        fontWeight: '600',
+        color: Colors.gray,
+    },
+    activeMiniTabText: {
+        fontSize: 13,
+        fontWeight: '600',
+        color: Colors.white,
     },
     scrollContent: {
         paddingHorizontal: Layout.padding,
     },
-    statsGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-    },
-    statCard: {
-        width: '48%',
-        backgroundColor: Colors.white,
-        padding: 16,
-        borderRadius: 12,
+    taskCard: {
         marginBottom: 16,
-        borderLeftWidth: 4,
-        ...Layout.cardShadow,
     },
-    statLabel: {
-        fontSize: 12,
-        color: Colors.gray,
-        fontWeight: '600',
-        marginBottom: 4,
-    },
-    statValue: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    complaintCard: {
-        marginBottom: 12,
-    },
-    complaintHeader: {
+    taskHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
         marginBottom: 8,
     },
-    complaintId: {
+    taskTime: {
+        fontSize: 12,
         fontWeight: '700',
         color: Colors.primary,
     },
-    statusBadge: {
+    priorityBadge: {
         paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 6,
+        paddingVertical: 2,
+        borderRadius: 4,
     },
-    statusText: {
+    priorityText: {
         fontSize: 10,
         fontWeight: 'bold',
         color: Colors.primary,
     },
-    complaintTitle: {
-        fontSize: 16,
-        fontWeight: '600',
+    taskTitle: {
+        fontSize: 17,
+        fontWeight: '700',
+        color: Colors.black,
         marginBottom: 12,
     },
-    complaintFooter: {
+    infoRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'center',
     },
-    complaintDate: {
-        fontSize: 12,
+    infoText: {
+        fontSize: 13,
         color: Colors.gray,
+        marginLeft: 6,
     },
-    complaintUser: {
-        fontSize: 12,
-        color: Colors.black,
-        fontWeight: '500',
+    startBtn: {
+        marginTop: 16,
+        height: 44,
+        borderRadius: 10,
+        backgroundColor: Colors.black,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    startBtnText: {
+        color: Colors.white,
+        fontWeight: '600',
     }
 });
